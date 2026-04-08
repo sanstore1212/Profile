@@ -2,30 +2,45 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pengingat Nomor 28 Hari</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial; padding: 20px; background: #f5f5f5; }
-    h2 { text-align: center; }
-    input, button { padding: 8px; margin: 5px; }
-    .card { background: white; padding: 10px; margin-top: 10px; border-radius: 8px; }
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { margin: 0; background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .container { max-width: 500px; margin: auto; padding: 20px; }
+    .card { background: white; padding: 15px; margin-top: 10px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2, h3 { text-align: center; color: white; }
+    .box { background: white; padding: 15px; border-radius: 16px; margin-bottom: 15px; }
+    input { width: 100%; padding: 10px; margin-top: 8px; border-radius: 10px; border: 1px solid #ddd; }
+    button { width: 100%; padding: 10px; margin-top: 10px; border: none; border-radius: 10px; background: #4facfe; color: white; font-weight: bold; cursor: pointer; }
+    button:hover { opacity: 0.9; }
     .expired { color: red; font-weight: bold; }
+    .row { display: flex; gap: 5px; }
+    .row button { flex: 1; }
   </style>
 </head>
 <body>
-  <h2>📱 Pengingat Nomor 28 Hari</h2>
+  <div class="container">
+    <h2>📱 Pengingat 28 Hari</h2>
 
-  <input type="text" id="nomor" placeholder="Masukkan nomor">
-  <input type="date" id="tanggal">
-  <button onclick="tambahData()">Tambah</button>
+    <div class="box">
+      <input type="text" id="nomor" placeholder="Masukkan nomor">
+      <input type="date" id="tanggal">
+      <button onclick="tambahData()">+ Tambah Data</button>
+    </div>
 
-  <hr>
+    <div class="box">
+      <h3>🔍 Cari Tanggal Keluar</h3>
+      <input type="date" id="cariTanggal">
+      <div class="row">
+        <button onclick="cariData()">Cari</button>
+        <button onclick="tampilkan()">Reset</button>
+      </div>
+    </div>
 
-  <h3>🔍 Cari berdasarkan tanggal keluar</h3>
-  <input type="date" id="cariTanggal">
-  <button onclick="cariData()">Cari</button>
-  <button onclick="tampilkan()">Reset</button>
-
-  <div id="list"></div>
+    <div id="list"></div>
+  </div>
 
   <script>
     let data = JSON.parse(localStorage.getItem('nomor28')) || [];
@@ -52,13 +67,11 @@
     function tampilkan(filterTanggal = null) {
       const list = document.getElementById('list');
       list.innerHTML = '';
-
       const today = new Date();
 
       data.forEach((item, index) => {
         const exp = new Date(item.expired);
         const isExpired = today >= exp;
-
         const expDateStr = exp.toISOString().split('T')[0];
 
         if (filterTanggal && expDateStr !== filterTanggal) return;
@@ -68,7 +81,7 @@
             <div><b>${item.nomor}</b></div>
             <div>Mulai: ${item.tanggal}</div>
             <div class="${isExpired ? 'expired' : ''}">
-              Harus keluar: ${exp.toLocaleDateString()}
+              Keluar: ${exp.toLocaleDateString()}
             </div>
             <button onclick="hapus(${index})">Hapus</button>
           </div>
